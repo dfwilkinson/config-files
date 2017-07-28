@@ -1,0 +1,36 @@
+# Allow for quick config change/reload
+bind R eval "source $HOME/.screenrc" "echo '.screenrc reloaded!'"
+
+# Allow mouse wheel to scrollback
+termcapinfo xterm* ti@:te@
+
+### Bottom two lines
+
+# caption line (2nd from bottom) shows windows, cpu load and time
+# We could use this to embed session name (as %`)
+# backtick 0 30 30 sh -c 'screen -ls | grep --color=no -o "$PPID[^[:space:]]*"'
+caption always '%{= Kk}[%L=%-w%45L>%{y}%n %t%{-}%+w]%=%-025=[%{c}%l%{-}][%{M}%C%{-}%{r}%a%{-}]'
+### Explanation of caption line
+#%{= Kk}                  set default color to be black (k) on gray (K)
+#%`                       (optional) display output of backtick command
+#[                        display open bracket (start of window list)
+#%{g}                     (optional) set foreground color to green
+#%L=                      mark this location for truncation (if necessary)
+#%-w                      display windows before current
+#%45L>                    mark for truncation
+#%{-}                     (optional: if set to green) reset color to default
+#%{yk}                    (optional) set color to black on yellow
+#%{y}                     set color to yellow
+#%n %t                    print number and title of current window
+#%{-}                     reset color to default
+#%+w                      display windows after current
+#%{-}                     reset color to default
+#]                        display closing bracket
+#%=                       pad middle of string with spaces
+#%-025=                   ensure last 25 characters don't get truncated
+#[%{c}%l%{-}]             display cpu load
+#[%{M}%C%{-}%{r}%a%{-}]'  display time
+
+# hardstatus line (bottom) shows window title (includes session name)
+# (bookending spaces required (on mac) for bar to be full length)
+hardstatus alwayslastline "%{Kw} %=%h%= "

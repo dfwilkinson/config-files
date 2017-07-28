@@ -1,0 +1,97 @@
+############################################################
+# Check for dircolors and alias ls derivatives accordingly
+############################################################
+DIR_COLORS=`which dircolors 2> /dev/null`
+DIR_COLORS_FIRST=`echo $DIR_COLORS | awk '{print $1}'`
+if [ -n "$DIR_COLORS" ] && [ "$DIR_COLORS_FIRST" != "no" ]; then
+	eval `dircolors -b`
+	alias l="ls --color -F"
+	alias la="ls --color -F -a"
+	alias ll="ls --color -F -h -l"
+	alias lla="ls --color -F -h -l -a"
+else
+	alias l="ls -F"
+	alias la="ls -F -a"
+	alias ll="ls -F -h -l"
+	alias lla="ls -F -h -l -a"
+fi
+
+############################################################
+# Variables for accounts and SVN
+############################################################
+#export abee='danaw@abee.cs.ualberta.ca'
+#export al='danaw@akasu-lk.cs.ualberta.ca'
+#export marker='danaw@markerville.cs.ualberta.ca'
+#export mcleod='danaw@mcleod.cs.ualberta.ca'
+#export morning='danaw@morningside.cs.ualberta.ca'
+#export pr='danaw@peace-riv.cs.ualberta.ca'
+#export akis='danaw@akisndale.cs.ualberta.ca'
+#export ardro='danaw@ardrossan.cs.ualberta.ca'
+export innis='danaw@innisfree.cs.ualberta.ca'
+#export pipestone='danaw@pipestone.cs.ualberta.ca'
+
+#export fe02='d3wilkin@fe02.cs.uwaterloo.ca'
+#export cpu102='d3wilkin@cpu102.cs.uwaterloo.ca'
+#export lab='d3wilkin@labyrinth.uwaterloo.ca'
+#export gorgon='dana@gorgon.cs.uwaterloo.ca'
+#export svn='svn+ssh://d3wilkin@fe02.cs.uwaterloo.ca/u1/d3wilkinson/SVN'
+export svn='svn+ssh://danaw@innisfree.cs.ualberta.ca/cshome/danaw/SVN'
+
+############################################################
+# Some very frequently used commands
+############################################################
+alias bell='echo '
+alias duka='du -sk * .??* | sort -n > disk_usage_k_all.txt; date >> disk_usage_k_all.txt; cat disk_usage_k_all.txt'
+alias duma='du -sm * .??* | sort -n > disk_usage_M_all.txt; date >> disk_usage_M_all.txt; cat disk_usage_M_all.txt'
+alias dukh='du -sk .??* | sort -n > disk_usage_k_hidden.txt; date >> disk_usage_k_hidden.txt; cat disk_usage_k_hidden.txt'
+alias dumh='du -sm .??* | sort -n > disk_usage_M_hidden.txt; date >> disk_usage_M_hidden.txt; cat disk_usage_M_hidden.txt'
+alias duk='du -sk * | sort -n > disk_usage_k.txt; date >> disk_usage_k.txt; cat disk_usage_k.txt'
+alias dum='du -sm * | sort -n > disk_usage_M.txt; date >> disk_usage_M.txt; cat disk_usage_M.txt'
+alias rcp='rsync -vazPe ssh'
+alias ss='ssh -X'
+alias vd='vimdiff'
+
+# CVS_RSH=ssh
+
+# MACHINE SPECIFIC
+#if [ "${HOSTNAME}" = "cyberiad" ]; then
+	#export PATH=$PATH:/home/dana/BuiltPrograms/bin
+#fi
+#if [ "${HOSTNAME}" = "labyrinth.cs" ]; then
+	#export PATH=$PATH:/home/matlabr14/bin
+#fi
+# if [ "${HOSTNAME}" = "abee" ]; then
+# 	alias pps='lpr -Pcs228'
+# fi
+# if [ "${HOSTNAME}" = "cyberiad" ]; then
+# 	alias xlock='xscreensaver-command -lock'
+# 	export JPATHj503a=/home/dana/Programs/j503a
+# fi
+# if [ "${HOSTNAME}" = "fe02.math" ]; then 
+# 	source /software/mfcf-basics/data/architecture.setenv
+# # 	export PATH=`/bin/showpath /software/gnu/bin $HOME/usr/local/bin $HOME/bin/bin standard`
+# 	export PATH=`/bin/showpath /software/gnu/bin $HOME/BuiltPrograms/bin standard`
+# 	export MANPATH=`showpath c=man $HOME/bin/man standard`
+# 	export TEXINPUTS='.//:$HOME/bin/TeX//:'
+# 	alias pmc='lpr -Pljp_3016 -Rmath8'
+# 	alias pdc='lpr -Pljp_cs -RRdale002'
+# fi
+#if [ "${HOSTNAME}" = "labyrinth.cs" ]; then
+#	export TERM=xterm-color
+#fi
+# export PATH=~/bin:$PATH
+# export TEXINPUTS=$TEXINPUTS:~/bin/TeX/
+# export PATH=~bowling/lib/bitkeeper:$PATH
+
+#alias mlab='xt matlab -nojvm -nosplash'
+#alias mlab='matlab -nodesktop -nosplash'
+#alias cplx='export ILOG_LICENSE_FILE=~burch/poker/LICENSE_FILE'
+#alias cvslab='source ~/UnixConfigFiles/cvs_lab'
+alias scn='screen -S'
+alias scr='screen -x'
+alias scl='screen -ls'
+alias scls='screen -ls'
+#alias pine='xt pine'
+#alias lynx='xt lynx'
+#alias vim='xt vim'
+

@@ -1,0 +1,26 @@
+=== In Windows (e.g., Explorer) ===
+   create C:\Users\builder\.vim (for viminfo when running from windows):
+mkdir /cygdrive/c/Users/builder/.vim
+
+   create C:\Users\builder\_vimrc with the line:
+source C:/cygwin/home/builder/.vimrc
+
+   make sure svn is in environment variables (for svn functions to work)
+My Computer->Properties->Advanced->Environment Variables->System variables
+   edit Path variable, add result of cygwin "which svn", e.g.,
+C:\cygwin\bin;C:\cygwin\usr\bin
+
+=== In cygwin ===
+   create /home/builder/.vimrc with the lines:
+set runtimepath+=C:/cygwin/home/builder/.vim
+source C:/cygwin/home/builder/.ConfigFiles/vim/functions/svn.vim
+source C:/cygwin/home/builder/.ConfigFiles/vim/vimrc
+color inkpot
+" after upgrading cygwin ":!" commands fail unless you do this?
+set shell=bash
+
+   create .vim (for viminfo when running from cygwin
+mkdir ~/.vim
+   copy plugins/color files TODO: FIX THIS, UPDATE FOR pathogen
+cp -R ~/.ConfigFiles/vim/colors ~/.vim/colors
+cp -R ~/.ConfigFiles/vim/plugins ~/.vim/plugin

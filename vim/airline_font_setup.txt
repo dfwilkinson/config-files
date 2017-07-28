@@ -1,0 +1,32 @@
+########## homebrew
+# Install homebrew (mac package manager).
+# installing to /usr/local (recommended):
+#ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"
+# installing locally (some packages may not work outside of /usr/local/):
+mkdir -p ~/BuiltPrograms/homebrew2
+curl -L https://github.com/mxcl/homebrew/tarball/master \
+  | tar xz --strip 1 -C ~/BuiltPrograms/homebrew2
+# run (and add to .bashrc):
+export PATH=$HOME/BuiltPrograms/homebrew/bin:$PATH
+# update
+brew update
+
+########## fontforge
+# Check the fontforge version (make sure it doesn't say NoPython):
+fontforge -version
+fontforge -version | grep NoPython  # for the lazy
+# If you need to update (or install) fontforge:
+brew uninstall fontforge  # update only
+brew update
+brew install fontforge
+
+########## fontpatcher
+# Get the fontpatcher script from powerline:
+cd ~/Versioned
+git clone https://github.com/Lokaltog/powerline.git
+# Pick a font and patch it:
+fontforge -script powerline/font/fontpatcher.py /Library/Fonts/Andale\ Mono.ttf
+# open it in Font Book and click "Install Font" (installs to ~/Library/Fonts):
+open Andale\ Mono\ for\ Powerline.ttf
+# in Terminal: Preferences->Settings->Text->Font->Change to patched
+# in gvim, edit vimrc e.g., : set guifont=Andale\ Mono\ for\ Powerline:h13

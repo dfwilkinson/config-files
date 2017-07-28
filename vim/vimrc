@@ -1,0 +1,586 @@
+" vim:set foldmethod=marker:
+"set modeline           " add these to ~/.vimrc if folding isn't working
+"set modelines=1        " (mvim sets this to 0 for some reason (security?))
+"verbose set modelines? " use this to check how/where it's set
+set cryptmethod=blowfish2
+
+"********************************************************************
+"       basic settings{{{
+"********************************************************************
+syntax on               " turn on syntax coloring
+filetype plugin on      " load plugin files based on file type
+set hidden              " enable hidden (loaded) buffers (allow switch without saving)
+set textwidth=70        " set the maximum width of the text to be 70
+set ts=2                " set tabwidth to be 2 (best for coding)
+set sw=2                " set shift width (for Ctrl-t, Ctrl-d) the same as tabwidth
+set expandtab           " replace tabs with spaces
+set number              " enable line numbering
+set ruler               " show row/column number
+"set esckeys             " set this if you get "ABCD" in insert mode when using arrow keys
+set nocompatible        " disable vi compatability (vim is much better)
+set noerrorbells        " turn off annoying beeping
+"set nohls               " don't highlight searched terms by default
+set nowrap              " don't wrap long lines by default
+set autoread            " automatically load files that have changed on disk
+set linebreak           " when wrap is on, break more usefully
+set completeopt=longest,menu,preview   " (tab) completion options
+set backspace=indent,eol,start         " allow deletion of existing text, etc
+set comments=sr:/*,mb:*,ex:*/          " why is this here?
+set formatoptions=tcrql                " good for code?
+"set formatoptions=tcrqwan             " good for text?
+"set ignorecase smartcase infercase     " better searching/completion NO!!!!
+set incsearch           " start searching right away
+set joinspaces          " two spaces after a period
+"set clipboard=unnamedplus " yank to X clipboard
+set laststatus=2        " always display last status
+hi StatusLine ctermfg=Cyan
+set dir=~/.vimswap//,/var/tmp//,/tmp//,. " save all swp files in the same dir
+
+"}}}
+"********************************************************************
+
+"********************************************************************
+"       viminfo options{{{
+"********************************************************************
+:set viminfo=%,'50,<1000,h,n~/.vim/viminfo
+"  %                    save/restore buffer list when vim run with no args
+"  '50                  remember marks for last 50 files edited
+"  <1000                up to 1000 lines saved per register
+"  h                 restore hlsearch
+"  n~/.vim/viminfo      name of viminfo file (must be last argument)
+"}}}
+"********************************************************************
+
+"********************************************************************
+"       window title{{{
+"********************************************************************
+let myAppName = "vim"
+if has("gui_running")
+   let myAppName = "g".myAppName
+endif
+" requires that $SHELL_TYPE be set by bashrc
+let myShellType = system("bash -c 'echo -n $SHELL_TYPE'")
+let myHost = ""
+if myShellType == "ssh"
+   let myHost = "@".substitute(hostname(), "\\..*", "", "")
+endif
+if has("win32")
+   let g:myTitlePrefix = ""
+else
+   let g:myTitlePrefix = myAppName.myHost." "
+endif
+if &term == "screen"
+   let myScreenName = system("bash -c 'echo -n $STY'")
+   let myScreenName = substitute( myScreenName, "[^.]*.", "", "" )
+   let g:myTitlePrefix = "screen[".myScreenName."] ".g:myTitlePrefix
+endif
+let g:myHomeDir = system("bash -c 'echo -n $HOME'")
+
+fun SetTitle()
+  "let myFilename = expand("%:p:~")  " full path
+   let myFilename = expand("%:t:~")  " filename only
+   if myFilename == ""
+      let myFilename = "<".substitute(getcwd(), g:myHomeDir, "~", "").">"
+   endif
+   "let g:myTitle = g:myTitlePrefix."%n:".myFilename." %y%r%m"
+   let g:myTitle = g:myTitlePrefix.myFilename." %y%r%m"
+   let &titlestring = g:myTitle
+endfun
+autocmd BufEnter * call SetTitle()
+
+if &term == "xterm" || &term == "vt220" || &term == "screen"
+   set title
+   set t_ts=]2;
+   set t_fs=
+endif
+"}}}
+"********************************************************************
+
+"********************************************************************
+"       colour in terminal{{{
+"********************************************************************
+if &term == "xterm" || &term == "screen"
+   if has("terminfo")
+      set t_Co=256
+      set t_Sf=[3%p1%dm
+      set t_Sb=[4%p1%dm
+   else
+      set t_Co=256
+      set t_Sf=[3%dm
+      set t_Sb=[4%dm
+   endif
+endif
+"}}}
+"********************************************************************
+
+"********************************************************************
+"       plugins{{{
+"********************************************************************
+
+" onetime setup of plugins on new machine
+" # cat ~/.ConfigFiles/vim/vimrc | grep SETUP | sed 's/^..//' > foo.src
+
+  " BUFFER/FILE PLUGINS
+" mkdir -p ~/.vim/autoload ~/.vim/bundle ~/.vim/colors # SETUP
+" cp -i ~/.ConfigFiles/vim/colors/inkpot.vim ~/.vim/colors/inkpot.vim # SETUP
+"colorscheme inkpot
+
+" https://github.com/junegunn/vim-plug
+call plug#begin('~/.vim/plugged')
+Plug 'vim-scripts/a.vim'
+Plug 'vim-scripts/QuickBuf'
+Plug 'jlanzarotta/bufexplorer'
+Plug 'vim-syntastic/syntastic'
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'vim-scripts/Conque-Shell'
+Plug 'easymotion/vim-easymotion'
+Plug 'sjl/gundo.vim'
+Plug 'vim-scripts/occur.vim'
+Plug 'scrooloose/nerdcommenter'
+Plug 'chrisbra/Recover.vim'
+Plug 'tpope/vim-surround'
+Plug 'junegunn/seoul256.vim'
+Plug 'junegunn/goyo.vim'
+Plug 'junegunn/limelight.vim'
+Plug 'ciaranm/inkpot'
+call plug#end()
+ ""colorscheme seoul256
+colorscheme inkpot
+
+" " Vundle is a newer plugin manager that automatically updates github plugins
+" " (of the form http://github.com/<user>/<plugin-name>).  For details see:
+" " https://github.com/gmarik/vundle#readme
+" " git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim # SETUP
+" " vim +PluginInstall +qall # SETUP
+" set nocompatible
+" filetype off
+" set rtp+=~/.vim/bundle/Vundle.vim
+" 
+" call vundle#begin()
+" Plugin 'gmarik/Vundle.vim'
+" " From https://github.com/vim-scripts/
+" " Plugin 'pathogen.vim'
+" Plugin 'a.vim'
+" Plugin 'QuickBuf'
+" Plugin 'bufexplorer.zip'
+" Plugin 'Syntastic'
+" Plugin 'ctrlp.vim'
+" Plugin 'Conque-Shell'
+" Plugin 'EasyMotion'
+" Plugin 'Gundo'
+" Plugin 'occur.vim'
+" Plugin 'The-NERD-Commenter'
+" Plugin 'recover.vim'
+" Plugin 'tpope/vim-surround'
+" " Plugin 'scrooloose/syntastic'
+" call vundle#end()
+" filetype plugin indent on
+
+" Pathogen is an older plugin manager (for non-github plugins?)
+" pathogen.vim : Easy manipulation of 'runtimepath', 'path', 'tags', etc
+" cp -i ~/.ConfigFiles/vim/plugins/pathogen.vim ~/.vim/autoload/ # SETUp
+" might need to use :Helptags after installing new bundle
+" execute pathogen#infect()
+
+  " BUFFER/FILE PLUGINS
+
+" a.vim : Alternate Files quickly (.c --> .h etc)
+" svn export ~/.ConfigFiles/vim/plugins/a ~/.vim/bundle/a # SETUp
+map <Leader>a :A<CR>
+
+" QuickBuf : Very small, clean but quick and powerful buffer manager!
+" svn export ~/.ConfigFiles/vim/plugins/QuickBuf ~/.vim/bundle/QuickBuf # SETUp
+let g:qb_hotkey="<Leader>bb" " default buffer list toggle is F4, I prefer this
+
+" adding buf explorer (qbuf flakes out if list doesn't fit)
+" bufexplorer.zip : Buffer Explorer / Browser
+" unzip ~/.ConfigFiles/vim/plugins/bufexplorer-7.3.6.zip -d ~/.vim/bundle/bufexplorer-7.3.6 # SETUp
+"noremap <script> <silent> <unique> <Leader>b  :BufExplorer<CR>
+"noremap <script> <silent> <unique> <Leader>bb  :BufExplorer<CR>
+noremap <script> <silent> <unique> <Leader>be :BufExplorer<CR>
+noremap <script> <silent> <unique> <Leader>bs :BufExplorerHorizontalSplit<CR>
+noremap <script> <silent> <unique> <Leader>bv :BufExplorerVerticalSplit<CR>
+
+" ctrlp.vim : Fuzzy file, buffer, mru, tag, ... finder with regexp support.
+" unzip ~/.ConfigFiles/vim/plugins/ctrlp.zip -d ~/.vim/bundle/ctrlp # SETUp
+let g:ctrlp_map = '' " disable default mapping
+let g:ctrlp_cmd = '' " disable default mapping
+nnoremap <leader>pf :CtrlP<CR>
+nnoremap <leader>pu :CtrlPBuffer<CR>
+nnoremap <leader>pm :CtrlPMRUFiles<CR>
+
+  " OTHER PLUGINS
+
+" vim-airline : lean & mean statusline that's light as air
+" git clone https://github.com/bling/vim-airline ~/.vim/bundle/vim-airline # SETUP
+" # Follow instructions in plugins/airline_font_setup.txt # SETUP
+set guifont=Andale\ Mono\ for\ Powerline:h13
+let g:airline_powerline_fonts=1
+if has("gui_running")  " I find this distracting in the terminal.  TODO: toggle?
+  let g:airline#extensions#tabline#enabled = 1
+endif
+
+" Conque Shell : Run interactive commands inside a Vim buffer
+" unzip ~/.ConfigFiles/vim/plugins/conque_2.3.zip -d ~/.vim/bundle/conque_2.3 # SETUp
+noremap <Leader>ii :ConqueTerm<Space>
+noremap <Leader>ib :ConqueTerm bash<CR>
+
+" EasyMotion : Vim motions on speed!
+" unzip ~/.ConfigFiles/vim/plugins/Lokaltog-vim-easymotion-1.3-0-g667a668.zip -d ~/.vim/bundle/ # SETUp
+" default mappings: <Leader><Leader>{f,F,t,T,w,W,b,B,e,E,ge,gE,j,k,n,,N}
+
+" Gundo : Visualize your undo tree.
+" unzip ~/.ConfigFiles/vim/plugins/gundo.zip -d ~/.vim/bundle # SETUp
+nnoremap <leader>u :GundoToggle<CR>
+
+" occur.vim : Show all lines in the buffer containing word (grep buffer)
+" svn export ~/.ConfigFiles/vim/plugins/occur ~/.vim/bundle/occur # SETUp
+" TODO: reasonable mappings
+nnoremap <silent> <unique> <Leader>n :Moccur<CR>
+nnoremap <silent> <unique> <Leader>N :Occur<CR>
+" nnoremap <silent> <unique> <Leader>* *<C-o>:Moccur<CR>  " default mapping
+nnoremap <silent> <unique> <Leader># #<C-o>:Moccur<CR>
+" experimental
+"nnoremap <silent> <unique> <Leader>8 *<C-o>:Moccur<CR>
+"nnoremap <silent> <unique> <Leader>3 #<C-o>:Moccur<CR>
+
+" NERD Commenter options
+let NERDSpaceDelims=1
+
+" " svndiff : Shows colored signs in buffer indicating diff with original svn/git file,
+" " svn export ~/.ConfigFiles/vim/plugins/svndiff ~/.vim/bundle/svndiff # SETUp
+" map <Leader>sn :call Svndiff("next")<kEnter>
+" map <Leader>sN :call Svndiff("prev")<kEnter>
+" map <Leader>sc :call Svndiff("clear")<kEnter>
+
+" UNUSED/NEED FIXING {{{
+
+" Set up commenting based on file type
+" TODO replace this with a script from vim.org?
+" :source ~/.ConfigFiles/vim/comment_map
+" Surround current line with c style comments
+" TODO: replace with NERD commenter (or similar)
+"map gzc mp^i/*<ESC>A*/<ESC>`p
+"map gzC mp:s/^\(\s*\)\/\*/\1/<kEnter>:s/*\/$//<kEnter>`p
+
+" taglist plugin (navigate functions etc)
+filetype on
+let Tlist_Close_On_Select = 0
+let Tlist_Compact_Format = 1
+let Tlist_Enable_Fold_Column = 0
+" let Tlist_File_Fold_Auto_Close = 1
+let Tlist_GainFocus_On_ToggleOpen = 1
+let Tlist_Show_Menu = 1
+let Tlist_Inc_Winwidth = 0
+let Tlist_Use_Right_Window = 1 " Broken! (in ion?)
+let Tlist_WinWidth = 25
+":source ~/.ConfigFiles/vim/plugins/taglist.vim
+" map <C-t> :TlistOpen<kEnter>
+" map <Leader>to :TlistOpen<kEnter>
+" map <Leader>t :TlistToggle<kEnter>
+
+"" project plugin
+"" map <Leader>pp :Project<kEnter>
+"" au WinLeave * set nocursorline nocursorcolumn
+"" au WinEnter * set cursorline cursorcolumn
+"" set cursorline cursorcolumn
+"let g:proj_window_width=8
+"let g:proj_window_increment=24
+"" let g:proj_flags="bcFimstv"
+"let g:proj_flags="bgFmstv"
+"" let g:proj_flags="bimnstv"
+"" nmap <Leader>p <Plug>ToggleProject<SPACE>
+"nmap <Leader>p <Plug>ToggleProject
+"nmap <Leader>o :Project<kEnter>
+
+"" omnicppcomplete plugin (:help omnicppcomplete)
+"" let OmniCpp_GlobalScopeSearch = 1 " [default=1]
+"" let OmniCpp_DisplayMode = 0 " [default=0]
+"let OmniCpp_ShowScopeInAbbr = 1 " [default=0]
+"" let OmniCpp_ShowPrototypeInAbbr = 1 " [default=0]
+"" let OmniCpp_ShowAccess = 1 " [default=1]
+"" let OmniCpp_DefaultNamespaces = [] " [default=[]]
+"" let OmniCpp_MayCompleteDot = 1 " [default=1]
+"" let OmniCpp_MayCompleteArrow = 1 " [default=1]
+"" let OmniCpp_MayCompleteScope = 1 " [default=0]
+"" let OmniCpp_SelectFirstItem = 0 " [default=0]
+"" let OmniCpp_LocalSearchDecl = 0 " [default=0]
+
+" Popup menu looks like (1)(2)(3)(4) or (4)::(1)(2)(3)
+" (1) name of the symbol, when a match ends with '(' it's a function.
+" (2) kind of the symbol, possible kinds are :
+"         * c = classes
+"         * d = macro definitions
+"         * e = enumerators (values inside an enumeration)
+"         * f = function definitions
+"         * g = enumeration names
+"         * m = class, struct, and union members
+"         * n = namespaces
+"         * p = function prototypes
+"         * s = structure names
+"         * t = typedefs
+"         * u = union names
+"         * v = variable definitions
+" (3) access, possible values are :
+"         * + = public
+
+
+" " MultipleSearch (highlighting only) plugin (ditching for mark.vim)
+" map <Leader>s :SearchBuffer
+
+" /UNUSED}}}
+
+"}}}
+"********************************************************************
+
+"********************************************************************
+"       mappings{{{
+"********************************************************************
+
+" custom extensions to "g<foo>" (use gc as prefix since it has no map)
+" like gf but creates file if it doesn't exist
+map gcf :e <cfile><CR>
+
+" append full date, short date or time to end of line
+map <Leader>da muA []"=strftime("%c")<CR>gP`u
+map <Leader>dd muA []"=strftime("%h%-e-%R")<CR>gP`u
+map <Leader>dt muA []"=strftime("%R")<CR>gP`u
+" insert date right here
+map <Leader>di i[]"=strftime("%c")<CR>gPl
+" insert date on line above current
+map <Leader>do muO[]"=strftime("%c")<CR>gP`u
+
+" change directory to that of local file
+map <Leader>cd :cd %:p:h<CR>
+" automatically change directory (might break plugins)
+"set autochdir
+"autocmd BufEnter * silent! lcd %:p:h
+
+" (win32 must source these explicitly in .vimrc to avoid path error)
+if has("win32")
+else
+  source ~/.ConfigFiles/vim/functions/c.vim
+  source ~/.ConfigFiles/vim/functions/colorcolumn.vim
+  source ~/.ConfigFiles/vim/functions/ruby.vim
+  source ~/.ConfigFiles/vim/functions/svn.vim
+endif
+
+  " with c shell script, captures output for quickfix (:cc,:cn,:cp,etc)
+  "source ~/.ConfigFiles/vim/functions/c.vim
+  command! C call CViewErrors(0) " Command to display only errors
+  command! Ca call CViewErrors(1) " Command to display both errors and warnings
+  command! Cx cfile /dev/null | cw
+
+  " toggle colored right border after textwidth chars
+  "source ~/.ConfigFiles/vim/functions/colorcolumn.vim
+  map  :call ToggleColorColumn()<cr>
+  imap   <Esc>:call ToggleColorColumn()<cr>a
+
+  " call ruby code on the fly
+  "source ~/.ConfigFiles/vim/functions/ruby.vim
+  map <Leader>re :call Ruby_eval_vsplit()<kEnter>
+  map <Leader>ra :execute "% :call Ruby_eval_vsplit()"<kEnter>
+
+  " My own functions for interacting with svn
+  "source ~/.ConfigFiles/vim/functions/svn.vim
+  map <Leader>sd :call StartSVNdiff()<kEnter>
+  map <Leader>sp :call StartSVNdiffWithPrev()<kEnter>
+  map <Leader>sb :call ShowSVNblame()<kEnter>
+  map <Leader>sl :call ShowSVNlog()<kEnter>
+  map <Leader>ss :call ShowSVNstatus()<kEnter>
+  map <Leader>se :call ClosePreviewWindow()<kEnter>
+
+" Execute current line or current selection as shell commands.
+nnoremap <Leader>xs yypv:!sh<CR>k
+"vnoremap <Leader>xs :!sh<CR>  " This does not seem to work...
+" Execute current line or current selection as Vim EX commands.
+nnoremap <Leader>xv :exe getline(".")<CR>
+vnoremap <Leader>xv :<C-w>exe join(getline("'<","'>"),'<Bar>')<CR>
+
+" toggle highlighting of searched text in normal and insert mode
+map <C-H> :set hls!<bar>set hls?<CR>
+imap <C-H> <ESC>:set hls!<bar>set hls?<CR>a
+
+" toggle row/column cursors
+map  :set cuc!<bar>set cuc?<CR>:set cul!<bar>set cul?<CR>
+imap  <ESC>:set cuc!<bar>set cuc?<CR>:set cul!<bar>set cul?<CR>a
+
+" justify in normal and (more importantly) insert mode
+map <C-j> {gq}
+imap <C-j> <ESC><C-j>i
+
+" go to next error (e.g., after :make)
+" not sure if this is a good idea (conflicts with yankring)
+" map <C-n> :cnzz
+" map <C-p> :cpzz
+" definitely not sure if *this* is a good idea
+"imap  :cnzz
+
+" Switch current character with next character (teh -> the)
+nnoremap <C-s> vxph
+imap <C-s> <ESC>l<C-s>i
+
+"}}}
+"********************************************************************
+
+"********************************************************************
+"       TODO:clean up the rest of this{{{
+"********************************************************************
+
+" Run latex on current file OLD AND UNUSED
+"com -range=% SW <line1>,<line2>s/\([^,].*\),\(.*\)/\2,\1/g
+"com L execute '!latex '.bufname("%")
+"" Run xdvi on current file's .dvi output
+"com K execute '!xdvi '.strpart(bufname("%"),0,strlen(bufname("%"))-4).'.dvi'
+"" Run ke
+"com M execute '!make'
+"com R execute '!./run'
+
+"function MyVsplit( ... )
+   "let g:oldColumnCount = &columns
+   "let &columns = g:oldColumnCount*2
+   "silent execute "vsplit ".a:1
+"endfunction
+"command! -nargs=? Vsplit silent call MyVsplit(<f-args>)
+
+function MyVsplit()
+   let &columns = &columns * 2
+   silent execute "vsplit"
+endfunction
+command! Vsplit silent call MyVsplit()
+
+" function WordCount()
+"   let s:old_status = v:statusmsg
+"   exe "silent normal g\<c-g>"
+"   let s:word_count = str2nr(split(v:statusmsg)[11])
+"   let v:statusmsg = s:old_status
+"   return s:word_count
+" endfunction
+
+
+
+" func! HideAll()
+"   syn region myFold start="{" end="}" transparent fold
+"   syn sync fromstart
+"   set foldnestmax=1
+"   set foldmethod=syntax
+" endfunc
+" amenu Whatever.Hide\ all :call HideAll()<CR>
+
+" :syn region myFold start="{" end="}" transparent fold
+" :syn sync fromstart
+" :set foldmethod=syntax
+" " :map <C-a> za
+
+" :syn region Comment start="/\*" end="\*/" fold
+
+" TODO: clean this up
+
+" restores last cursor position in a file?
+au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
+
+"inoremap <expr> <C-n> pumvisible() ? '<C-n>' : '<C-n><C-r>=pumvisible() ? "\<Down>" : ""<CR>'
+"inoremap <expr> <M-,> pumvisible() ? '<C-n>' : '<C-x><C-o><C-n><C-p><C-r>=pumvisible() ? "\<Down>" : ""<CR>'
+
+function! TogglePreviewWindowInCompleteOpt()
+   if stridx( &completeopt, "preview" ) == -1
+      set completeopt+=preview
+   else
+      set completeopt-=preview
+      pc
+   endif
+   return ""
+endfunction
+inoremap ,d <C-R>=TogglePreviewWindowInCompleteOpt()<CR>
+inoremap <expr> <C-S> pumvisible() ? "\<C-R>=TogglePreviewWindowInCompleteOpt()<CR><C-n><C-p>" : "\<C-S>"
+
+" context specific tab behavior
+function! CleverTab()
+  if pumvisible()
+    return "\<C-N>"
+  else
+    return "\<Tab>"
+  endif
+  " use tab to start omnicomplete if appropriate
+  "if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
+    "return "\<Tab>"
+  "elseif exists('&omnifunc') && &omnifunc != ''
+    "return "\<C-X>\<C-O>"
+  "else
+    "return "\<C-N>"
+  "endif
+endfunction
+inoremap <Tab> <C-R>=CleverTab()<CR>
+
+" if completing, enter selects (instead of entering a CR)
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+" if completing, esc cancels (and closes preview window) instead of selecting
+" Not sure how I feel about this... turns out I'm pretty used to esc selecting
+" inoremap <expr> <Esc> pumvisible() ? "\<C-e>\<Esc>\<C-w>\<C-z>a" : "\<Esc>"
+
+
+if has('gui_running') " gvim specific options
+set tw=0
+" start with row/column cursor on
+set cuc " column
+set cul " row
+
+
+
+" window size:
+"set lines=40
+
+" scroll bar at the left rather than the right:
+set guioptions-=r
+"set guioptions+=l
+
+" no menu, and no toolbar:
+set guioptions-=m
+set guioptions-=T
+"set guifont=Inconsolata\ 11 " need patched fonts for airline
+
+" have a small-ish yet readable font:
+" set guifont=*fixed*medium*semicondensed*120*iso8859-1*
+
+" have error messages red on white (rather than t'tother way round,
+" which isn't readable in the above font):
+highlight ErrorMsg guibg=White guifg=Red
+
+" Set window title
+"  Old way, much simpler
+" let myhost = substitute(hostname(), "\\..*", "", "")
+" if myhost == "waterloo"
+"    let myhost = "localhost"
+" endif
+" "autocmd BufEnter * let &titlestring = "gvim ".expand("%:p:~")." on ".myhost
+" "  New way, too crufty for little gain...
+" fun SetTitle()
+"    let myhost = substitute(hostname(), "\\..*", "", "")
+"    if myhost == "waterloo"
+"       let myhost = "localhost"
+"    endif
+"    let myfile = expand("%:p:~")
+"    if myfile == ""
+"       let myfile = substitute(getcwd(), "/home/dana/", "~/", "")."/?"
+"    endif
+"    let &titlestring = "gvim ".myfile." on ".myhost
+" endfun
+" autocmd BufEnter * call SetTitle()
+"
+" if &term == "screen"
+"         autocmd BufEnter * let &titlestring = "SCREEN: gvim ".expand("%:p:~")." on ".myhost
+" endif
+" if &term == "xterm" || &term == "vt220" || &term == "screen"
+"         set title
+"         set t_ts=
+" endif
+
+" :hi LineNr guifg=darkcyan guibg=darkblue
+else
+endif
+"}}}
+"********************************************************************
+
+set guioptions+=r  " scroll bar on right, always shown
+set relativenumber

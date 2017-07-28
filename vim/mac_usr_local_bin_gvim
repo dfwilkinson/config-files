@@ -1,0 +1,3 @@
+#!/bin/sh
+binary="/usr/local/bin/mvim"
+exec "$binary" -g -f ${1:+"$@"}
