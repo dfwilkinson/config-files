@@ -1,2 +1,7 @@
 set modelines=1        " (mvim sets this to 0 for some reason (security?))
+set vb                 " no beeping please
+
 source ~/.ConfigFiles/vim/vimrc
+
+" let $XIKI_DIR = "~/xiki-master"
+" source ~/xiki-master/misc/vim/xiki.vim
