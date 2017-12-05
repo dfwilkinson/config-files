@@ -1,12 +1,26 @@
-# Pull configs from GitHub
+########## Pull configs from GitHub
 mkdir -p ~/Versioned/GitHub/ConfigFiles
 cd ~/Versioned/GitHub/ConfigFiles
 git init
-# Need to set up ssh keys first
-# https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/
+# Set up ssh keys: https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/
+# ssh-keygen -t rsa -b 4096 -C "dfwilkinson@github.com"
 git pull git@github.com:dfwilkinson/config-files.git
+git remote add origin git@github.com:dfwilkinson/config-files.git
 # symbolic link (assuming checked out configs are in ~/Versioned/)
 ln -s ~/Versioned/GitHub/ConfigFiles ~/.ConfigFiles
+# vimdiff for git
+git config --global diff.tool vimdiff
+git config --global difftool.prompt false
+git config --global alias.d difftool
+
+########## Basic git
+git status
+# Push local changes
+git add .
+git commit -m "description"
+git push origin master
+# Pull local changes
+git pull origin master
 
 ########## bash
 # Add this line to ~/.bashrc (Linux/Windows)
