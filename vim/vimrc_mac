@@ -3,5 +3,6 @@ set vb                 " no beeping please
 
 source ~/.ConfigFiles/vim/vimrc
 
+" TODO: install and try xiki again
 " let $XIKI_DIR = "~/xiki-master"
 " source ~/xiki-master/misc/vim/xiki.vim

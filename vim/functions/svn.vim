@@ -40,7 +40,7 @@ endfunction
 function! CaptureShellOutputInTempfile( bufString, commandString )
    let srcFile=expand( a:bufString )
    let outputFile=tempname()
-   silent! execute "!".a:commandString." ".srcFile." > ".outputFile
+   silent! execute "!".a:commandString."".srcFile." > ".outputFile
    return outputFile
 endfunction
 
@@ -75,17 +75,26 @@ function ResizeWindowToFitPosition( movementString, verticalQ )
 endfunction
 
 function! StartG4diff()
-   call PreviewShellOutput( "%", "g4 cat", 1 )   
+   call PreviewShellOutput( "%", "g4 cat ", 1 )   
    call SetDiff()
    wincmd w
    call SetDiff()
 endfunction
 
+function! StartGitdiff()
+   let cwd = getcwd()
+   lcd %:p:h
+   call PreviewShellOutput( "%:t", "git show HEAD:./", 1 )   
+   call SetDiff()
+   wincmd w
+   call SetDiff()
+   exe "lcd ".cwd
+endfunction
 
 " functions for interacting with subversions
 
 function! StartSVNdiff()
-   call PreviewShellOutput( "%", "svn cat", 1 )   
+   call PreviewShellOutput( "%", "svn cat ", 1 )   
    call SetDiff()
    wincmd w
    call SetDiff()
@@ -99,14 +108,14 @@ function! StartSVNdiffWithPrev()
       let revisionNumber="PREV"
    endif
    echo "using revision number: ".revisionNumber
-   call PreviewShellOutput( "%", "svn cat -r ".revisionNumber, 1 )   
+   call PreviewShellOutput( "%", "svn cat -r ".revisionNumber." ", 1 )   
    call SetDiff()
    wincmd w
    call SetDiff()
 endfunction
 
 function! ShowSVNblame()
-   call PreviewShellOutput( "%", "svn blame", 1 )   
+   call PreviewShellOutput( "%", "svn blame ", 1 )   
    call SetScrollbind()
    call ResizeWindowToFitPosition( "wwhh", 1 )
    wincmd w
@@ -114,13 +123,13 @@ function! ShowSVNblame()
 endfunction
 
 function! ShowSVNlog()
-   call PreviewShellOutput( "%", "svn log -v", 0 )   
+   call PreviewShellOutput( "%", "svn log -v ", 0 )   
    call ResizeWindowToFitPosition( "ggj/--n", 0 )
    wincmd w
 endfunction
 
 function! ShowSVNstatus()
-   call PreviewShellOutput( "%:h", "svn status -u", 0 )   
+   call PreviewShellOutput( "%:h", "svn status -u ", 0 )   
    call ResizeWindowToFitPosition( "G", 0 )
    wincmd w
 endfunction

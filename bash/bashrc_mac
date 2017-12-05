@@ -1,8 +1,8 @@
-alias qp='qlmanage -p'
-alias vim='/Applications/MacVim.app/Contents/MacOS/Vim'
-
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
 
 source ~/.ConfigFiles/bash/bashrc
 
+alias mv="mv -i"        # Don't blow away important stuff
+alias qp='qlmanage -p'  # Quick preview
+# alias vim='/Applications/MacVim.app/Contents/MacOS/Vim'

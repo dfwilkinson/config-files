@@ -1,13 +1,19 @@
+# Pull configs from GitHub
+mkdir -p ~/Versioned/GitHub/ConfigFiles
+cd ~/Versioned/GitHub/ConfigFiles
+git init
+# Need to set up ssh keys first
+# https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/
+git pull git@github.com:dfwilkinson/config-files.git
 # symbolic link (assuming checked out configs are in ~/Versioned/)
 ln -s ~/Versioned/GitHub/ConfigFiles ~/.ConfigFiles
 
 ########## bash
-# add these lines to ~/.bashrc
-export PShost=<YOUR HOSTNAME>          # needed for the prompt function
-source ~/.ConfigFiles/bash/bashrc      # all custom bash config
-# add this line to ~/.bashrc on mac
+# Add this line to ~/.bashrc (Linux/Windows)
+source ~/.ConfigFiles/bash/bashrc
+# Add this line to ~/.bashrc on mac.
 source ~/.ConfigFiles/bash/bashrc_mac
-# mac also needs ~/.bash_profile 
+# Mac also needs ~/.bash_profile 
 echo "source ~/.bashrc" > ~/.bash_profile
 
 ########## screen
@@ -17,19 +23,15 @@ source ~/.ConfigFiles/screenrc
 source $HOME/.ConfigFiles/screenrc
 
 ########## vim
-# install plugins etc.
-# add this line to .vimrc
+# add one of these lines to .vimrc
 source ~/.ConfigFiles/vim/vimrc
+source ~/.ConfigFiles/vim/vimrc_mac
 # see ~/.ConfigFiles/vim/setup_vim_on_windows.txt for windows setup
-Run :PlugInstall to install plugins
-Fix QBuf color bug:
-in: ~/.vim/plugged/QuickBuf/plugin/qbuf.vim change
+
+### Install plugins
+# Run this command:
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+# Then run :PlugInstall to install plugins
+# Then, to fix QBuf color bug in: ~/.vim/plugged/QuickBuf/plugin/qbuf.vim change
   exe "hi Cursor guibg=" . s:cursorbg                                 . " guifg=".  ((s:cursorfg == "") ? "NONE" : s:cursorfg)
   exe "hi Cursor guibg=" . ((s:cursorbg == "") ? "NONE" : s:cursorbg) . " guifg=".  ((s:cursorfg == "") ? "NONE" : s:cursorfg)
-
-# OLD INSTRUCTIONS
-cat ~/.ConfigFiles/vim/vimrc | grep SETUP | sed 's/^..//' > foo.src
-source foo.src  # might want to double check it first :)
-# add this line to .vimrc
-source ~/.ConfigFiles/vim/vimrc
-# see ~/.ConfigFiles/vim/setup_vim_on_windows.txt for windows setup

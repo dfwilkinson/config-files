@@ -117,92 +117,44 @@ endif
 "       plugins{{{
 "********************************************************************
 
-" onetime setup of plugins on new machine
-" # cat ~/.ConfigFiles/vim/vimrc | grep SETUP | sed 's/^..//' > foo.src
-
-  " BUFFER/FILE PLUGINS
-" mkdir -p ~/.vim/autoload ~/.vim/bundle ~/.vim/colors # SETUP
-" cp -i ~/.ConfigFiles/vim/colors/inkpot.vim ~/.vim/colors/inkpot.vim # SETUP
-"colorscheme inkpot
-
 " https://github.com/junegunn/vim-plug
 call plug#begin('~/.vim/plugged')
 Plug 'vim-scripts/a.vim'
 Plug 'vim-scripts/QuickBuf'
 Plug 'jlanzarotta/bufexplorer'
-Plug 'vim-syntastic/syntastic'
 Plug 'ctrlpvim/ctrlp.vim'
+Plug 'airblade/vim-gitgutter'
+Plug 'chrisbra/Recover.vim'
+Plug 'vim-syntastic/syntastic'
 Plug 'vim-scripts/Conque-Shell'
+Plug 'junegunn/vim-easy-align'
 Plug 'easymotion/vim-easymotion'
 Plug 'sjl/gundo.vim'
 Plug 'vim-scripts/occur.vim'
 Plug 'scrooloose/nerdcommenter'
-Plug 'chrisbra/Recover.vim'
 Plug 'tpope/vim-surround'
 Plug 'junegunn/seoul256.vim'
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/limelight.vim'
 Plug 'ciaranm/inkpot'
 call plug#end()
- ""colorscheme seoul256
 colorscheme inkpot
+"colorscheme seoul256
 
-" " Vundle is a newer plugin manager that automatically updates github plugins
-" " (of the form http://github.com/<user>/<plugin-name>).  For details see:
-" " https://github.com/gmarik/vundle#readme
-" " git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim # SETUP
-" " vim +PluginInstall +qall # SETUP
-" set nocompatible
-" filetype off
-" set rtp+=~/.vim/bundle/Vundle.vim
-" 
-" call vundle#begin()
-" Plugin 'gmarik/Vundle.vim'
-" " From https://github.com/vim-scripts/
-" " Plugin 'pathogen.vim'
-" Plugin 'a.vim'
-" Plugin 'QuickBuf'
-" Plugin 'bufexplorer.zip'
-" Plugin 'Syntastic'
-" Plugin 'ctrlp.vim'
-" Plugin 'Conque-Shell'
-" Plugin 'EasyMotion'
-" Plugin 'Gundo'
-" Plugin 'occur.vim'
-" Plugin 'The-NERD-Commenter'
-" Plugin 'recover.vim'
-" Plugin 'tpope/vim-surround'
-" " Plugin 'scrooloose/syntastic'
-" call vundle#end()
-" filetype plugin indent on
-
-" Pathogen is an older plugin manager (for non-github plugins?)
-" pathogen.vim : Easy manipulation of 'runtimepath', 'path', 'tags', etc
-" cp -i ~/.ConfigFiles/vim/plugins/pathogen.vim ~/.vim/autoload/ # SETUp
-" might need to use :Helptags after installing new bundle
-" execute pathogen#infect()
-
-  " BUFFER/FILE PLUGINS
+" BUFFER/FILE PLUGINS
 
 " a.vim : Alternate Files quickly (.c --> .h etc)
-" svn export ~/.ConfigFiles/vim/plugins/a ~/.vim/bundle/a # SETUp
 map <Leader>a :A<CR>
 
 " QuickBuf : Very small, clean but quick and powerful buffer manager!
-" svn export ~/.ConfigFiles/vim/plugins/QuickBuf ~/.vim/bundle/QuickBuf # SETUp
 let g:qb_hotkey="<Leader>bb" " default buffer list toggle is F4, I prefer this
 
-" adding buf explorer (qbuf flakes out if list doesn't fit)
-" bufexplorer.zip : Buffer Explorer / Browser
-" unzip ~/.ConfigFiles/vim/plugins/bufexplorer-7.3.6.zip -d ~/.vim/bundle/bufexplorer-7.3.6 # SETUp
-"noremap <script> <silent> <unique> <Leader>b  :BufExplorer<CR>
-"noremap <script> <silent> <unique> <Leader>bb  :BufExplorer<CR>
+" bufexplorer : for when qbuf flakes out or filelist doesn't fit
 noremap <script> <silent> <unique> <Leader>be :BufExplorer<CR>
 noremap <script> <silent> <unique> <Leader>bs :BufExplorerHorizontalSplit<CR>
 noremap <script> <silent> <unique> <Leader>bv :BufExplorerVerticalSplit<CR>
 
 " ctrlp.vim : Fuzzy file, buffer, mru, tag, ... finder with regexp support.
-" unzip ~/.ConfigFiles/vim/plugins/ctrlp.zip -d ~/.vim/bundle/ctrlp # SETUp
 let g:ctrlp_map = '' " disable default mapping
 let g:ctrlp_cmd = '' " disable default mapping
 nnoremap <leader>pf :CtrlP<CR>
@@ -211,118 +163,39 @@ nnoremap <leader>pm :CtrlPMRUFiles<CR>
 
   " OTHER PLUGINS
 
-" vim-airline : lean & mean statusline that's light as air
-" git clone https://github.com/bling/vim-airline ~/.vim/bundle/vim-airline # SETUP
-" # Follow instructions in plugins/airline_font_setup.txt # SETUP
-set guifont=Andale\ Mono\ for\ Powerline:h13
-let g:airline_powerline_fonts=1
-if has("gui_running")  " I find this distracting in the terminal.  TODO: toggle?
-  let g:airline#extensions#tabline#enabled = 1
-endif
+" " TODO: try installing this again?
+" " vim-airline : lean & mean statusline that's light as air
+" " git clone https://github.com/bling/vim-airline ~/.vim/bundle/vim-airline # SETUP
+" " # Follow instructions in plugins/airline_font_setup.txt # SETUP
+" set guifont=Andale\ Mono\ for\ Powerline:h13
+" let g:airline_powerline_fonts=1
+" if has("gui_running")  " I find this distracting in the terminal.  TODO: toggle?
+"   let g:airline#extensions#tabline#enabled = 1
+" endif
 
 " Conque Shell : Run interactive commands inside a Vim buffer
-" unzip ~/.ConfigFiles/vim/plugins/conque_2.3.zip -d ~/.vim/bundle/conque_2.3 # SETUp
 noremap <Leader>ii :ConqueTerm<Space>
 noremap <Leader>ib :ConqueTerm bash<CR>
 
+" vim-easy-align:  A simple, easy-to-use Vim alignment plugin.
+xmap ga <Plug>(EasyAlign)
+nmap ga <Plug>(EasyAlign)
+
 " EasyMotion : Vim motions on speed!
-" unzip ~/.ConfigFiles/vim/plugins/Lokaltog-vim-easymotion-1.3-0-g667a668.zip -d ~/.vim/bundle/ # SETUp
 " default mappings: <Leader><Leader>{f,F,t,T,w,W,b,B,e,E,ge,gE,j,k,n,,N}
 
 " Gundo : Visualize your undo tree.
-" unzip ~/.ConfigFiles/vim/plugins/gundo.zip -d ~/.vim/bundle # SETUp
 nnoremap <leader>u :GundoToggle<CR>
 
 " occur.vim : Show all lines in the buffer containing word (grep buffer)
-" svn export ~/.ConfigFiles/vim/plugins/occur ~/.vim/bundle/occur # SETUp
-" TODO: reasonable mappings
 nnoremap <silent> <unique> <Leader>n :Moccur<CR>
-nnoremap <silent> <unique> <Leader>N :Occur<CR>
-" nnoremap <silent> <unique> <Leader>* *<C-o>:Moccur<CR>  " default mapping
-nnoremap <silent> <unique> <Leader># #<C-o>:Moccur<CR>
-" experimental
-"nnoremap <silent> <unique> <Leader>8 *<C-o>:Moccur<CR>
-"nnoremap <silent> <unique> <Leader>3 #<C-o>:Moccur<CR>
+nnoremap <silent> <unique> <Leader>N :StarOccur<CR>
+nnoremap <silent> <unique> <Leader><C-n> :Occur<CR>
 
 " NERD Commenter options
 let NERDSpaceDelims=1
 
-" " svndiff : Shows colored signs in buffer indicating diff with original svn/git file,
-" " svn export ~/.ConfigFiles/vim/plugins/svndiff ~/.vim/bundle/svndiff # SETUp
-" map <Leader>sn :call Svndiff("next")<kEnter>
-" map <Leader>sN :call Svndiff("prev")<kEnter>
-" map <Leader>sc :call Svndiff("clear")<kEnter>
-
 " UNUSED/NEED FIXING {{{
-
-" Set up commenting based on file type
-" TODO replace this with a script from vim.org?
-" :source ~/.ConfigFiles/vim/comment_map
-" Surround current line with c style comments
-" TODO: replace with NERD commenter (or similar)
-"map gzc mp^i/*<ESC>A*/<ESC>`p
-"map gzC mp:s/^\(\s*\)\/\*/\1/<kEnter>:s/*\/$//<kEnter>`p
-
-" taglist plugin (navigate functions etc)
-filetype on
-let Tlist_Close_On_Select = 0
-let Tlist_Compact_Format = 1
-let Tlist_Enable_Fold_Column = 0
-" let Tlist_File_Fold_Auto_Close = 1
-let Tlist_GainFocus_On_ToggleOpen = 1
-let Tlist_Show_Menu = 1
-let Tlist_Inc_Winwidth = 0
-let Tlist_Use_Right_Window = 1 " Broken! (in ion?)
-let Tlist_WinWidth = 25
-":source ~/.ConfigFiles/vim/plugins/taglist.vim
-" map <C-t> :TlistOpen<kEnter>
-" map <Leader>to :TlistOpen<kEnter>
-" map <Leader>t :TlistToggle<kEnter>
-
-"" project plugin
-"" map <Leader>pp :Project<kEnter>
-"" au WinLeave * set nocursorline nocursorcolumn
-"" au WinEnter * set cursorline cursorcolumn
-"" set cursorline cursorcolumn
-"let g:proj_window_width=8
-"let g:proj_window_increment=24
-"" let g:proj_flags="bcFimstv"
-"let g:proj_flags="bgFmstv"
-"" let g:proj_flags="bimnstv"
-"" nmap <Leader>p <Plug>ToggleProject<SPACE>
-"nmap <Leader>p <Plug>ToggleProject
-"nmap <Leader>o :Project<kEnter>
-
-"" omnicppcomplete plugin (:help omnicppcomplete)
-"" let OmniCpp_GlobalScopeSearch = 1 " [default=1]
-"" let OmniCpp_DisplayMode = 0 " [default=0]
-"let OmniCpp_ShowScopeInAbbr = 1 " [default=0]
-"" let OmniCpp_ShowPrototypeInAbbr = 1 " [default=0]
-"" let OmniCpp_ShowAccess = 1 " [default=1]
-"" let OmniCpp_DefaultNamespaces = [] " [default=[]]
-"" let OmniCpp_MayCompleteDot = 1 " [default=1]
-"" let OmniCpp_MayCompleteArrow = 1 " [default=1]
-"" let OmniCpp_MayCompleteScope = 1 " [default=0]
-"" let OmniCpp_SelectFirstItem = 0 " [default=0]
-"" let OmniCpp_LocalSearchDecl = 0 " [default=0]
-
-" Popup menu looks like (1)(2)(3)(4) or (4)::(1)(2)(3)
-" (1) name of the symbol, when a match ends with '(' it's a function.
-" (2) kind of the symbol, possible kinds are :
-"         * c = classes
-"         * d = macro definitions
-"         * e = enumerators (values inside an enumeration)
-"         * f = function definitions
-"         * g = enumeration names
-"         * m = class, struct, and union members
-"         * n = namespaces
-"         * p = function prototypes
-"         * s = structure names
-"         * t = typedefs
-"         * u = union names
-"         * v = variable definitions
-" (3) access, possible values are :
-"         * + = public
 
 
 " " MultipleSearch (highlighting only) plugin (ditching for mark.vim)
@@ -352,9 +225,6 @@ map <Leader>do muO[]"=strftime("%c")<CR>gP`u
 
 " change directory to that of local file
 map <Leader>cd :cd %:p:h<CR>
-" automatically change directory (might break plugins)
-"set autochdir
-"autocmd BufEnter * silent! lcd %:p:h
 
 " (win32 must source these explicitly in .vimrc to avoid path error)
 if has("win32")
@@ -383,6 +253,7 @@ endif
 
   " My own functions for interacting with svn
   "source ~/.ConfigFiles/vim/functions/svn.vim
+  map <Leader>sg :call StartGitdiff()<kEnter>
   map <Leader>sd :call StartSVNdiff()<kEnter>
   map <Leader>sp :call StartSVNdiffWithPrev()<kEnter>
   map <Leader>sb :call ShowSVNblame()<kEnter>
@@ -523,10 +394,9 @@ inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 if has('gui_running') " gvim specific options
 set tw=0
 " start with row/column cursor on
-set cuc " column
-set cul " row
-
-
+" Nope, conflicts with color/syntax
+"set cuc " column
+"set cul " row
 
 " window size:
 "set lines=40
