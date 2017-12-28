@@ -35,6 +35,7 @@ set joinspaces          " two spaces after a period
 set laststatus=2        " always display last status
 hi StatusLine ctermfg=Cyan
 set dir=~/.vimswap//,/var/tmp//,/tmp//,. " save all swp files in the same dir
+set pastetoggle=<leader>v " toggle paste mode more quickly
 
 "}}}
 "********************************************************************
@@ -224,7 +225,16 @@ map <Leader>di i[]"=strftime("%c")<CR>gPl
 map <Leader>do muO[]"=strftime("%c")<CR>gP`u
 
 " change directory to that of local file
-map <Leader>cd :cd %:p:h<CR>
+" map <Leader>cd :cd %:p:h<CR>
+map <Leader>cd :cd %:h<CR>
+" automatically change directory (might break plugins)
+"set autochdir
+"autocmd BufEnter * silent! lcd %:p:h
+
+" Copy current file name into unnamed register
+noremap <silent> <Leader>fn :let @"=expand("%")<CR>
+noremap <silent> <Leader>fd :let @"=expand("%:h")<CR>
+noremap <silent> <Leader>fp :let @"=expand("%:p")<CR>
 
 " (win32 must source these explicitly in .vimrc to avoid path error)
 if has("win32")
@@ -253,7 +263,7 @@ endif
 
   " My own functions for interacting with svn
   "source ~/.ConfigFiles/vim/functions/svn.vim
-  map <Leader>sg :call StartGitdiff()<kEnter>
+  map <Leader>st :call StartGitdiff()<kEnter>
   map <Leader>sd :call StartSVNdiff()<kEnter>
   map <Leader>sp :call StartSVNdiffWithPrev()<kEnter>
   map <Leader>sb :call ShowSVNblame()<kEnter>
@@ -284,6 +294,8 @@ imap <C-j> <ESC><C-j>i
 " not sure if this is a good idea (conflicts with yankring)
 " map <C-n> :cnzz
 " map <C-p> :cpzz
+map <C-N> :cnzz
+map <C-P> :cpzz
 " definitely not sure if *this* is a good idea
 "imap  :cnzz
 
