@@ -223,6 +223,8 @@ map <Leader>dt muA []"=strftime("%R")<CR>gP`u
 map <Leader>di i[]"=strftime("%c")<CR>gPl
 " insert date on line above current
 map <Leader>do muO[]"=strftime("%c")<CR>gP`u
+map <Leader>ds :call SetDiff()<CR>
+map <Leader>du :call UnsetDiff()<CR>
 
 " change directory to that of local file
 " map <Leader>cd :cd %:p:h<CR>
