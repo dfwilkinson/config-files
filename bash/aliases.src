@@ -17,7 +17,7 @@ else
 fi
 
 ############################################################
-# Variables for accounts and SVN
+# Variables for accounts and SVN (all defunct)
 ############################################################
 #export abee='danaw@abee.cs.ualberta.ca'
 #export al='danaw@akasu-lk.cs.ualberta.ca'
@@ -27,7 +27,7 @@ fi
 #export pr='danaw@peace-riv.cs.ualberta.ca'
 #export akis='danaw@akisndale.cs.ualberta.ca'
 #export ardro='danaw@ardrossan.cs.ualberta.ca'
-export innis='danaw@innisfree.cs.ualberta.ca'
+#export innis='danaw@innisfree.cs.ualberta.ca'
 #export pipestone='danaw@pipestone.cs.ualberta.ca'
 
 #export fe02='d3wilkin@fe02.cs.uwaterloo.ca'
@@ -35,7 +35,7 @@ export innis='danaw@innisfree.cs.ualberta.ca'
 #export lab='d3wilkin@labyrinth.uwaterloo.ca'
 #export gorgon='dana@gorgon.cs.uwaterloo.ca'
 #export svn='svn+ssh://d3wilkin@fe02.cs.uwaterloo.ca/u1/d3wilkinson/SVN'
-export svn='svn+ssh://danaw@innisfree.cs.ualberta.ca/cshome/danaw/SVN'
+#export svn='svn+ssh://danaw@innisfree.cs.ualberta.ca/cshome/danaw/SVN'
 
 ############################################################
 # Some very frequently used commands
@@ -87,11 +87,25 @@ alias vd='vimdiff'
 #alias mlab='matlab -nodesktop -nosplash'
 #alias cplx='export ILOG_LICENSE_FILE=~burch/poker/LICENSE_FILE'
 #alias cvslab='source ~/UnixConfigFiles/cvs_lab'
-alias scn='screen -S'
-alias scr='screen -x'
-alias scl='screen -ls'
-alias scls='screen -ls'
 #alias pine='xt pine'
 #alias lynx='xt lynx'
 #alias vim='xt vim'
 
+############################################################
+# History related commands
+############################################################
+export PATH=$PATH:~/.ConfigFiles/Scripts
+alias hex="history | filter_history_up_to_last_exit.rb"
+alias hgrep="history | grep"
+
+############################################################
+# Screen related commands
+############################################################
+alias scn='screen -S'
+alias scn='screen -S'
+alias scr='screen -x'
+alias scl='screen -ls'
+alias scls='screen -ls'
+alias scr='screen -x'
+alias scl='screen -ls'
+alias scls='screen -ls'

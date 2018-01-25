@@ -65,7 +65,10 @@ ${BLD}\h:${OFF}${PWD}
    export EDITOR=vim
    export PAGER=less
    export MANPAGER=less
-   export HISTCONTROL=ignoredups # No duplicates in history
+   export HISTCONTROL=ignoredups:erasedups # No duplicates in history
+   export HISTSIZE=100000                  # big big history
+   export HISTFILESIZE=100000              # big big history
+   shopt -s histappend                     # append to history, don't overwrite it
    umask 027 # Default file creation mask
    set +o emacs; set -o vi # vi command-line editing
 
@@ -114,6 +117,16 @@ ${BLD}\h:${OFF}${PWD}
     if [ -n "$box_indent" ]; then printf "%0.s " $(seq 1 $box_indent); fi
     printf "$underline${text_to_box}$nounderline\n"
   }
+
+  # if [[ $TERM == screen ]]; then
+  #   export foo=`screen -Q title`
+  #   # declare SCREEN_NAME=$(echo $STY | sed -nr 's/[^.]*\.(.*)/\1/p')
+  #   # if [[ $SCREEN_NAME ]]; then
+  #   #   HISTFILE="${HISTFILE}.${SCREEN_NAME}.${WINDOW}"
+  #   #   declare -p HISTFILE
+  #   # fi
+  #   # unset SCREEN_NAME
+  # fi
 
 ##################################################
 # Print some useful info on start up

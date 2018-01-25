@@ -467,7 +467,7 @@ endif
 set guioptions+=r  " scroll bar on right, always shown
 set relativenumber
 
-" Let's give this a shot...                                                                                                            
+" Let's give this a shot...
 inoremap jk <Esc> 
 
 function! NumberToggle()
