@@ -1,6 +1,9 @@
 # Allow for quick config change/reload
 bind R eval "source $HOME/.screenrc" "echo '.screenrc reloaded!'"
 
+# Larger scrollback
+defscrollback 10000
+
 # Allow mouse wheel to scrollback
 termcapinfo xterm* ti@:te@
 
