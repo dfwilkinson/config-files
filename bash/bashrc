@@ -131,11 +131,12 @@ ${BLD}\h:${OFF}${PWD}
 ##################################################
 # Print some useful info on start up
 ##################################################
-   echo "  Starting shell on ${PSuser}@${PShost}"
-   echo "    terminal: $TERM"
-   echo "    type    : $SHELL_TYPE"
-   echo "    width   : ${COLUMNS}"
-   echo "    screens :"
-   screen -ls | head -n -2 | tail -n +2
+    echo "  Starting shell on ${PSuser}@${PShost}"
+    echo "    terminal: $TERM"
+    echo "    type    : $SHELL_TYPE"
+    echo "    width   : ${COLUMNS}"
+    #echo "    screens :"
+    #screen -ls | head -n -2 | tail -n +2  # -2 doesn't work on mac
+    screen -ls
 
 fi # endif [ "$PS1" ];
