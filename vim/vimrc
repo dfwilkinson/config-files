@@ -120,42 +120,45 @@ endif
 
 " https://github.com/junegunn/vim-plug
 call plug#begin('~/.vim/plugged')
-Plug 'vim-scripts/a.vim'
+" BUFFER/FILE PLUGINS
 Plug 'vim-scripts/QuickBuf'
+Plug 'chrisbra/Recover.vim'
+Plug 'vim-scripts/a.vim'
 Plug 'jlanzarotta/bufexplorer'
 Plug 'ctrlpvim/ctrlp.vim'
-Plug 'airblade/vim-gitgutter'
-Plug 'chrisbra/Recover.vim'
+" OTHER PLUGINS
+Plug 'junegunn/goyo.vim'
+Plug 'sjl/gundo.vim'
+Plug 'junegunn/limelight.vim'
+Plug 'scrooloose/nerdcommenter'
+Plug 'vim-scripts/occur.vim'
 Plug 'vim-syntastic/syntastic'
-Plug 'vim-scripts/Conque-Shell'
+Plug 'majutsushi/tagbar'
 Plug 'junegunn/vim-easy-align'
 Plug 'easymotion/vim-easymotion'
-Plug 'sjl/gundo.vim'
-Plug 'vim-scripts/occur.vim'
-Plug 'scrooloose/nerdcommenter'
+Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-surround'
-Plug 'junegunn/seoul256.vim'
-Plug 'junegunn/goyo.vim'
-Plug 'junegunn/limelight.vim'
+" THEMES
 Plug 'ciaranm/inkpot'
+Plug 'junegunn/seoul256.vim'
 call plug#end()
 colorscheme inkpot
 "colorscheme seoul256
 
 " BUFFER/FILE PLUGINS
 
-" a.vim : Alternate Files quickly (.c --> .h etc)
+" *a* Switch between source files and header files quickly (.c --> .h etc).
 map <Leader>a :A<CR>
 
-" QuickBuf : Very small, clean but quick and powerful buffer manager!
+" *QuickBuf* helps navigate and manipulate buffers - small and quick.
 let g:qb_hotkey="<Leader>bb" " default buffer list toggle is F4, I prefer this
 
-" bufexplorer : for when qbuf flakes out or filelist doesn't fit
+" *bufexplorer* BufExplorer Plugin for Vim - for when qbuf filelist doesn't fit.
 noremap <script> <silent> <unique> <Leader>be :BufExplorer<CR>
 noremap <script> <silent> <unique> <Leader>bs :BufExplorerHorizontalSplit<CR>
 noremap <script> <silent> <unique> <Leader>bv :BufExplorerVerticalSplit<CR>
 
-" ctrlp.vim : Fuzzy file, buffer, mru, tag, ... finder with regexp support.
+" *ctrlp* Full path fuzzy file, buffer, mru, tag, ... finder for Vim.
 let g:ctrlp_map = '' " disable default mapping
 let g:ctrlp_cmd = '' " disable default mapping
 nnoremap <leader>pf :CtrlP<CR>
@@ -163,6 +166,64 @@ nnoremap <leader>pu :CtrlPBuffer<CR>
 nnoremap <leader>pm :CtrlPMRUFiles<CR>
 
   " OTHER PLUGINS
+
+" *vim-gitgutter* shows a git diff in the 'gutter'
+" GitGutterLineHighlightsEnable  " Won't work, vimrc runs before plugin loaded.
+" Three different ways of running a plugin command:
+" autocmd VimEnter * GitGutterLineHighlightsEnable  " 1) Works.
+" let g:gitgutter_highlight_lines = 1  " 2) Works but kind of a hack.
+" 3) put a file in your ~/.vim/after/plugin directory if dislike VimEnter.
+" In the end, not sure I want this on by default anyway :)
+
+" *Recover* adds a diff option when Vim finds a swap file.
+
+" *syntastic* is a syntax checking plugin for Vim.
+
+" *vim-easy-align* A simple, easy-to-use Vim alignment plugin.
+xmap ga <Plug>(EasyAlign)
+nmap ga <Plug>(EasyAlign)
+
+" *vim-easy-motion* Vim motion on speed!
+" default mappings: <Leader><Leader>{f,F,t,T,w,W,b,B,e,E,ge,gE,j,k,n,,N}
+
+" *gundo* is Vim plugin to visualize your Vim undo tree.
+nnoremap <leader>u :GundoToggle<CR>
+
+" *occur* Search for regexp in the current buffer or all buffers.
+nnoremap <silent> <unique> <Leader>n :Moccur<CR>
+nnoremap <silent> <unique> <Leader>N :StarOccur<CR>
+nnoremap <silent> <unique> <Leader><C-n> :Occur<CR>
+
+" *nerdcommenter* Comment functions so powerful—no comment necessary.
+let NERDSpaceDelims=1
+
+" *vim-surround* easily delete, change and add surroundings in pairs.
+" change surroundings: cs<from><to> e.g., cs"'
+" delete surroundings: ds<delimiter> e.g., ds"
+" you surround: ys<motion-or-text><delimiter> e.g., ysiw)
+"   yss operates on current line
+
+" *tagbar* a class outline viewer for Vim.
+nnoremap <silent> <unique> <Leader>tc :TagbarCurrentTag<CR>
+nnoremap <silent> <unique> <Leader>tf :TagbarTogglePause<CR>
+nnoremap <silent> <unique> <Leader>tg :TagbarOpenAutoClose<CR>
+nnoremap <silent> <unique> <Leader>ts :TagbarShowTag<CR>
+nnoremap <silent> <unique> <Leader>tt :TagbarToggle<CR>
+let g:tagbar_width = 50
+let g:tagbar_zoomwidth = 0
+let g:tagbar_show_linenumbers = 1
+
+" *goyo* Distraction-free writing in Vim.
+" let g:goyo_width='90%'  " default: 80
+" let g:goyo_height='90%' " default: 85%
+let g:goyo_linenr=1     " default: 0
+nnoremap <silent> <unique> <Leader>g :Goyo<CR>
+
+" *limelight* Hyperfocus-writing in Vim.
+autocmd! User GoyoEnter Limelight
+autocmd! User GoyoLeave Limelight!
+
+" UNUSED/NEED FIXING {{{
 
 " " TODO: try installing this again?
 " " vim-airline : lean & mean statusline that's light as air
@@ -174,30 +235,10 @@ nnoremap <leader>pm :CtrlPMRUFiles<CR>
 "   let g:airline#extensions#tabline#enabled = 1
 " endif
 
-" Conque Shell : Run interactive commands inside a Vim buffer
-noremap <Leader>ii :ConqueTerm<Space>
-noremap <Leader>ib :ConqueTerm bash<CR>
-
-" vim-easy-align:  A simple, easy-to-use Vim alignment plugin.
-xmap ga <Plug>(EasyAlign)
-nmap ga <Plug>(EasyAlign)
-
-" EasyMotion : Vim motions on speed!
-" default mappings: <Leader><Leader>{f,F,t,T,w,W,b,B,e,E,ge,gE,j,k,n,,N}
-
-" Gundo : Visualize your undo tree.
-nnoremap <leader>u :GundoToggle<CR>
-
-" occur.vim : Show all lines in the buffer containing word (grep buffer)
-nnoremap <silent> <unique> <Leader>n :Moccur<CR>
-nnoremap <silent> <unique> <Leader>N :StarOccur<CR>
-nnoremap <silent> <unique> <Leader><C-n> :Occur<CR>
-
-" NERD Commenter options
-let NERDSpaceDelims=1
-
-" UNUSED/NEED FIXING {{{
-
+" " Conque Shell : Run interactive commands inside a Vim buffer
+" Plug 'vim-scripts/Conque-Shell'
+" noremap <Leader>ii :ConqueTerm<Space>
+" noremap <Leader>ib :ConqueTerm bash<CR>
 
 " " MultipleSearch (highlighting only) plugin (ditching for mark.vim)
 " map <Leader>s :SearchBuffer
@@ -225,6 +266,7 @@ map <Leader>di i[]"=strftime("%c")<CR>gPl
 map <Leader>do muO[]"=strftime("%c")<CR>gP`u
 map <Leader>ds :call SetDiff()<CR>
 map <Leader>du :call UnsetDiff()<CR>
+map <Leader>dw :call SetDiff()<CR>:call SetDiff()<CR>
 
 " change directory to that of local file
 " map <Leader>cd :cd %:p:h<CR>
