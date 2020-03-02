@@ -138,9 +138,22 @@ Plug 'junegunn/vim-easy-align'
 Plug 'easymotion/vim-easymotion'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-surround'
+" Clobbers a lot of other paste related bindings (e.g. my date insertions).
+" Plug 'vim-scripts/YankRing.vim'
+Plug 'ludovicchabant/vim-lawrencium'
 " THEMES
 Plug 'ciaranm/inkpot'
 Plug 'junegunn/seoul256.vim'
+
+" Testing
+Plug 'Shougo/unite.vim'
+Plug 'Shougo/vimproc.vim', { 'do': 'make'}
+
+" if !empty(glob("$HOME/.vimrc_local"))
+"       source $HOME/.vimrc_local
+"     endif
+Plug '/google/src/head/depot/google3/experimental/users/dpyle/unite-codesearch'
+
 call plug#end()
 colorscheme inkpot
 "colorscheme seoul256
@@ -203,6 +216,10 @@ let NERDSpaceDelims=1
 " you surround: ys<motion-or-text><delimiter> e.g., ysiw)
 "   yss operates on current line
 
+" *YankRing* Maintains a history of previous yanks, changes and deletes.
+" Clobbers a lot of other paste related bindings (e.g. my date insertions).
+" nnoremap <silent> <unique> <Leader>yy :YRShow<CR>
+
 " *tagbar* a class outline viewer for Vim.
 nnoremap <silent> <unique> <Leader>tc :TagbarCurrentTag<CR>
 nnoremap <silent> <unique> <Leader>tf :TagbarTogglePause<CR>
@@ -264,6 +281,8 @@ map <Leader>dt muA []"=strftime("%R")<CR>gP`u
 map <Leader>di i[]"=strftime("%c")<CR>gPl
 " insert date on line above current
 map <Leader>do muO[]"=strftime("%c")<CR>gP`u
+
+" Diff commands
 map <Leader>ds :call SetDiff()<CR>
 map <Leader>du :call UnsetDiff()<CR>
 map <Leader>dw :call SetDiff()<CR>:call SetDiff()<CR>

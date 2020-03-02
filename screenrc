@@ -1,6 +1,11 @@
 # Allow for quick config change/reload
 bind R eval "source $HOME/.screenrc" "echo '.screenrc reloaded!'"
 
+# Fuck the lock screen
+bind ^x
+bind x
+
+
 # Larger scrollback
 defscrollback 10000
 
