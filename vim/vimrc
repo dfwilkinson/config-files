@@ -138,6 +138,7 @@ Plug 'nathanaelkane/vim-indent-guides' " Nice!
 Plug 'MattesGroeger/vim-bookmarks'     " Seems cool
 Plug 'inkarkat/vim-ingo-library'
 Plug 'inkarkat/vim-mark'
+Plug 'romainl/vim-cool'   " disable hls after searching
 " OTHER PLUGINS
 Plug 'junegunn/goyo.vim'
 Plug 'sjl/gundo.vim'
