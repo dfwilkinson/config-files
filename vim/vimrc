@@ -161,6 +161,12 @@ Plug 'junegunn/seoul256.vim'
 " Plug 'Shougo/unite.vim'
 " Plug 'Shougo/vimproc.vim', { 'do': 'make'}
 
+if has('nvim') || has('patch-8.0.902')
+  Plug 'mhinz/vim-signify'
+else
+  Plug 'mhinz/vim-signify', { 'branch': 'legacy' }
+endif
+
 " " if !empty(glob("$HOME/.vimrc_local"))
 " "       source $HOME/.vimrc_local
 " "     endif
