@@ -1,5 +1,5 @@
 " vim:set foldmethod=marker:
-"set modeline           " add these to ~/.vimrc if folding isn't working
+"det modeline           " add these to ~/.vimrc if folding isn't working
 "set modelines=1        " (mvim sets this to 0 for some reason (security?))
 "verbose set modelines? " use this to check how/where it's set
 set cryptmethod=blowfish2
@@ -128,14 +128,14 @@ Plug 'vim-scripts/a.vim'
 Plug 'jlanzarotta/bufexplorer'
 Plug 'ctrlpvim/ctrlp.vim'
 " Testing https://sherif.io/2016/05/30/favorite-vim-plugins.html
-" Plug 'mattn/ctrlp-mark'                " Doesn't work?
-Plug 'sgur/ctrlp-extensions.vim'       " Not sure what this does
-Plug 'tacahiroy/ctrlp-funky'           " Not tested yet
-Plug 'itchyny/lightline.vim'           " Looks neat
-Plug 'nathanaelkane/vim-indent-guides' " Nice!
-" Plug 'liuchengxu/vim-clap'             " Requires newer vim
+" Plug 'mattn/ctrlp-mark'                 " Doesn't work?
+Plug 'sgur/ctrlp-extensions.vim'        " Not sure what this does
+Plug 'tacahiroy/ctrlp-funky'            " Not tested yet
+Plug 'itchyny/lightline.vim'            " Looks neat
+Plug 'nathanaelkane/vim-indent-guides'  " Nice!
+" Plug 'liuchengxu/vim-clap'              " Requires newer vim
 " Testing others
-Plug 'MattesGroeger/vim-bookmarks'     " Seems cool
+Plug 'MattesGroeger/vim-bookmarks'      " Seems cool
 Plug 'inkarkat/vim-ingo-library'
 Plug 'inkarkat/vim-mark'
 Plug 'romainl/vim-cool'   " disable hls after searching
@@ -149,7 +149,7 @@ Plug 'vim-syntastic/syntastic'
 Plug 'majutsushi/tagbar'
 Plug 'junegunn/vim-easy-align'
 Plug 'easymotion/vim-easymotion'
-Plug 'airblade/vim-gitgutter'
+" Plug 'airblade/vim-gitgutter'  " [Apr30-09:59] replaced by Signify?
 Plug 'tpope/vim-surround'
 " Clobbers a lot of other paste related bindings (e.g. my date insertions).
 " Plug 'vim-scripts/YankRing.vim'
@@ -173,10 +173,30 @@ endif
 " "     endif
 " Plug '/google/src/head/depot/google3/experimental/users/dpyle/unite-codesearch'
 
-Plug 'sjl/badwolf'
-Plug 'reedes/vim-colors-pencil'
+Plug 'sjl/badwolf'  " Maybe
+Plug 'reedes/vim-colors-pencil'  " Probably no
 call plug#end()
 
+" Signify - https://github.com/mhinz/vim-signify/blob/master/doc/signify.txt
+nmap <leader>sj <plug>(signify-next-hunk)
+nmap <leader>sk <plug>(signify-prev-hunk)
+nmap <leader>sJ 9999<leader>sj
+nmap <leader>sK 9999<leader>sk
+nmap <leader>sn <plug>(signify-next-hunk)
+nmap <leader>sp <plug>(signify-prev-hunk)
+nmap <leader>sN 9999<leader>sn
+nmap <leader>sP 9999<leader>sp
+nmap <leader>ss :SignifyHunkDiff<CR>
+nmap <leader>st :SignifyToggle<CR>
+nmap <leader>sh :SignifyToggleHighlight<CR>
+nmap <leader>sd :SignifyDiff<CR>
+nmap <leader>sD :SignifyDiff!<CR>
+nmap <leader>sf :SignifyFold<CR>
+nmap <leader>sF :SignifyFold!<CR>
+" Convenient shortcut after diff/fold
+nmap <leader>sc :tabclose<CR>
+
+" Plug 'inkarkat/vim-mark'
 nmap <Leader>hh <Plug>MarkSet
 xmap <Leader>hh <Plug>MarkSet
 nmap <Leader>hm <Plug>MarkSet
@@ -187,17 +207,17 @@ nmap <Leader>ht <Plug>MarkToggle
 xmap <Leader>ht <Plug>MarkToggle
 
 nmap <Leader>hc <Plug>MarkClear
-nmap <Leader>h* <Plug>MarkSearchCurrentNext
-nmap <Leader>h# <Plug>MarkSearchCurrentPrev
-nmap <Leader>h/ <Plug>MarkSearchAnyNext
-nmap <Leader>h? <Plug>MarkSearchAnyPrev
+nmap <Leader>hn <Plug>MarkSearchCurrentNext
+nmap <Leader>hp <Plug>MarkSearchCurrentPrev
+nmap <Leader>hN <Plug>MarkSearchAnyNext
+nmap <Leader>hP <Plug>MarkSearchAnyPrev
 
 let g:mwIgnoreCase = 1
 
 let g:lightline = { 'colorscheme': 'darcula' } " Tomorrow also good
 
 colorscheme inkpot
-"colorscheme seoul256
+"colorscheme seoul256  " NO!, too bright
 
 let g:bookmark_no_default_key_mappings = 1
 nmap <Leader>mm <Plug>BookmarkToggle
@@ -210,7 +230,7 @@ nmap <Leader>mx <Plug>BookmarkClearAll
 nmap <Leader>mK <Plug>BookmarkMoveUp
 nmap <Leader>mJ <Plug>BookmarkMoveDown
 nmap <Leader>mg <Plug>BookmarkMoveToLine
-let g:bookmark_disable_ctrlp = 1	
+let g:bookmark_disable_ctrlp = 1
 let g:bookmark_highlight_lines = 1
 " Doesn't work?
 "highlight BookmarkSign ctermbg=NONE ctermfg=160
@@ -369,7 +389,8 @@ else
   source ~/.ConfigFiles/vim/functions/c.vim
   source ~/.ConfigFiles/vim/functions/colorcolumn.vim
   source ~/.ConfigFiles/vim/functions/ruby.vim
-  source ~/.ConfigFiles/vim/functions/svn.vim
+  " [May14-12:28] replacing with Signify
+  " source ~/.ConfigFiles/vim/functions/svn.vim
 endif
 
   " with c shell script, captures output for quickfix (:cc,:cn,:cp,etc)
@@ -390,13 +411,14 @@ endif
 
   " My own functions for interacting with svn
   "source ~/.ConfigFiles/vim/functions/svn.vim
-  map <Leader>st :call StartGitdiff()<kEnter>
-  map <Leader>sd :call StartSVNdiff()<kEnter>
-  map <Leader>sp :call StartSVNdiffWithPrev()<kEnter>
-  map <Leader>sb :call ShowSVNblame()<kEnter>
-  map <Leader>sl :call ShowSVNlog()<kEnter>
-  map <Leader>ss :call ShowSVNstatus()<kEnter>
-  map <Leader>se :call ClosePreviewWindow()<kEnter>
+  " [Apr30-09:50] Replacing with Signify
+  " map <Leader>st :call StartGitdiff()<kEnter>
+  " map <Leader>sd :call StartSVNdiff()<kEnter>
+  " map <Leader>sp :call StartSVNdiffWithPrev()<kEnter>
+  " map <Leader>sb :call ShowSVNblame()<kEnter>
+  " map <Leader>sl :call ShowSVNlog()<kEnter>
+  " map <Leader>ss :call ShowSVNstatus()<kEnter>
+  " map <Leader>se :call ClosePreviewWindow()<kEnter>
 
 " Execute current line or current selection as shell commands.
 nnoremap <Leader>xs yypv:!sh<CR>k
