@@ -193,6 +193,7 @@ nmap <leader>sd :SignifyDiff<CR>
 nmap <leader>sD :SignifyDiff!<CR>
 nmap <leader>sf :SignifyFold<CR>
 nmap <leader>sF :SignifyFold!<CR>
+nmap <leader>su :SignifyHunkUndo<CR>
 " Convenient shortcut after diff/fold
 nmap <leader>sc :tabclose<CR>
 
@@ -281,6 +282,9 @@ nmap ga <Plug>(EasyAlign)
 " default mappings: <Leader><Leader>{f,F,t,T,w,W,b,B,e,E,ge,gE,j,k,n,,N}
 
 " *gundo* is Vim plugin to visualize your Vim undo tree.
+if has('python3')
+  let g:gundo_prefer_python3 = 1
+endif
 nnoremap <leader>u :GundoToggle<CR>
 
 " *occur* Search for regexp in the current buffer or all buffers.
