@@ -1,5 +1,7 @@
 " vim:set foldmethod=marker:
-"det modeline           " add these to ~/.vimrc if folding isn't working
+" NOTE: DO NOT set modeline, potential security risk
+" https://github.com/numirias/security/blob/master/doc/2019-06-04_ace-vim-neovim.md
+"set modeline           " add these to ~/.vimrc if folding isn't working
 "set modelines=1        " (mvim sets this to 0 for some reason (security?))
 "verbose set modelines? " use this to check how/where it's set
 set cryptmethod=blowfish2
@@ -197,6 +199,49 @@ nmap <leader>su :SignifyHunkUndo<CR>
 " Convenient shortcut after diff/fold
 nmap <leader>sc :tabclose<CR>
 
+" https://groups.google.com/a/google.com/g/vi-users/c/Kx96AFjqTDw/m/VjTSibRRAgAJ
+" Plug 'mhinz/vim-signify'
+" " update signify whenever we get focus, not just on save
+" " let g:signify_update_on_focusgained = 1
+" let g:signify_realtime = 1
+" let g:signify_cursorhold_insert = 0
+" let g:signify_cursorhold_normal = 0
+" " TODO store the current hg revision in target_commit
+" " make it easy to diff again last committed revision for google stuff, as found
+" " by this command:
+" " hg log -r smart --template '{node}\n' | tail -1
+" " diff against older revision for signify gutter
+let g:target_commit = 0
+command! SignifyEarlier call ChangeTargetCommit('older')
+command! SignifyLater call ChangeTargetCommit('younger')
+" nnoremap ]r :SignifyOlder<CR>
+" nnoremap [r :SignifyNewer<CR>
+nnoremap <leader>se :SignifyEarlier<CR>
+nnoremap <leader>sl :SignifyLater<CR>
+
+" " TODO supply specific revision
+" " command! -nargs=1 SignifyRev call ChangeTargetCommit(<args>)
+" "
+" " taken from https://github.com/mhinz/vim-signify/issues/284
+function ChangeTargetCommit(older_or_younger)
+  if a:older_or_younger ==# 'older'
+    let g:target_commit += 1
+  elseif g:target_commit==#0
+    echom 'No timetravel! Cannot diff against HEAD~-1'
+    return
+  else
+    let g:target_commit -= 1
+  endif
+  let g:signify_vcs_cmds.git = printf('%s%d%s', 'git diff --no-color --no-ext-diff -U0 HEAD~', g:target_commit, ' -- %f')
+  let g:signify_vcs_cmds.hg = printf('%s%d%s', 'hg diff --config extensions.color=! --config defaults.diff= --nodates -U0 --rev .~', g:target_commit, ' -- %f')
+  let g:signify_vcs_cmds_diffmode.hg = printf('%s%d %s', 'hg cat --rev .~', g:target_commit, '%f')
+  let l:cur_rev_cmd = printf('hg log --rev .~%d --template ''{node|short} {fill(desc, "50")|firstline}\n''', g:target_commit)
+  let l:cur_rev = system(l:cur_rev_cmd)
+  let l:output_msg = printf('%s%d %s', 'Now diffing against HEAD~', g:target_commit, l:cur_rev)
+  echom l:output_msg
+  :SignifyRefresh
+endfunction
+
 " Plug 'inkarkat/vim-mark'
 nmap <Leader>hh <Plug>MarkSet
 xmap <Leader>hh <Plug>MarkSet
@@ -206,14 +251,30 @@ nmap <Leader>hr <Plug>MarkRegex
 xmap <Leader>hr <Plug>MarkRegex
 nmap <Leader>ht <Plug>MarkToggle
 xmap <Leader>ht <Plug>MarkToggle
-
+ 
 nmap <Leader>hc <Plug>MarkClear
 nmap <Leader>hn <Plug>MarkSearchCurrentNext
 nmap <Leader>hp <Plug>MarkSearchCurrentPrev
 nmap <Leader>hN <Plug>MarkSearchAnyNext
 nmap <Leader>hP <Plug>MarkSearchAnyPrev
 
+
 let g:mwIgnoreCase = 1
+" https://learnvimscriptthehardway.stevelosh.com/chapters/38.html
+function! MarkPluginToggleIgnoreCase()
+  " https://learnvimscriptthehardway.stevelosh.com/chapters/22.html
+  if g:mwIgnoreCase ==# 0
+    let g:mwIgnoreCase = 1
+  else
+    let g:mwIgnoreCase = 0
+  endif 
+endfunction
+map <Leader>hT :call MarkPluginToggleIgnoreCase()<CR>
+
+if !exists(":DiffOrig")
+  command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis | wincmd p | diffthis
+  endif
+
 
 let g:lightline = { 'colorscheme': 'darcula' } " Tomorrow also good
 
@@ -317,7 +378,7 @@ let g:tagbar_zoomwidth = 0
 let g:tagbar_show_linenumbers = 1
 
 " *goyo* Distraction-free writing in Vim.
-"let g:goyo_width='80%'  " default: 80
+let g:goyo_width='80%'  " default: 80
 " let g:goyo_height='85%' " default: 85%
 " let g:goyo_linenr=1     " default: 0
 nnoremap <silent> <unique> <Leader>y :Goyo<CR>
