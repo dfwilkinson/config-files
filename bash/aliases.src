@@ -41,6 +41,7 @@ fi
 # Some very frequently used commands
 ############################################################
 alias bell='echo '
+alias bell3='echo '
 alias duka='du -sk * .??* | sort -n > disk_usage_k_all.txt; date >> disk_usage_k_all.txt; cat disk_usage_k_all.txt'
 alias duma='du -sm * .??* | sort -n > disk_usage_M_all.txt; date >> disk_usage_M_all.txt; cat disk_usage_M_all.txt'
 alias dukh='du -sk .??* | sort -n > disk_usage_k_hidden.txt; date >> disk_usage_k_hidden.txt; cat disk_usage_k_hidden.txt'
